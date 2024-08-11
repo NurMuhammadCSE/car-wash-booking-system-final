@@ -1,4 +1,3 @@
-import { json } from "express";
 import { authServices } from "./auth.service";
 import httpStatus from "http-status";
 import { catchAsync } from "../../../utils/catchAsync";
@@ -9,6 +8,7 @@ const signUp = catchAsync(async (req, res) => {
 
   res.status(httpStatus.OK).json({
     success: true,
+    statusCode: httpStatus.OK,
     message: "User registered successfully",
     data: result,
   });
@@ -25,6 +25,7 @@ const login = catchAsync(async (req, res) => {
   });
 
   res.status(httpStatus.OK).json({
+    statusCode: httpStatus.OK,
     success: true,
     message: "User Login Successfully",
     token: accessToken,
