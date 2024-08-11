@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from "http-status";
 import AppError from "../../../errors/AppError";
 import { Service } from "../service/service.model";
@@ -57,30 +58,23 @@ const createSlot = async (payload: TSlot) => {
   return slots;
 };
 
-const getAllSlots = async () => {
-  const result = await Slot.find();
-  return result;
+const getAllSlots = async (date?: string, serviceId?: string) => {
+  const filter: any = { isBooked: "available" };
+
+  if (date) {
+    filter.date = new Date(date);
+  }
+
+  if (serviceId) {
+    filter.service = serviceId;
+  }
+
+  const slots = await Slot.find(filter).populate("service");
+  return slots;
 };
 
-const getSingleSlot = async (id: string) => {
-  const result = await Slot.findById(id);
-  return result;
-};
-
-const updateSlot = async (id: string, payload: Partial<TSlot>) => {
-  const result = await Slot.findByIdAndUpdate(id, payload, { new: true });
-  return result;
-};
-
-const deleteSlot = async (id: string) => {
-  const result = await Slot.findByIdAndDelete(id);
-  return result;
-};
 
 export const SlotServices = {
   createSlot,
   getAllSlots,
-  getSingleSlot,
-  updateSlot,
-  deleteSlot,
 };

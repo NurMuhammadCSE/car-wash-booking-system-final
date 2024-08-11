@@ -14,55 +14,20 @@ const createSlot = catchAsync(async (req, res) => {
     data: result,
   });
 });
+
 const getAllSlots = catchAsync(async (req, res) => {
-  const result = await SlotServices.getAllSlots();
+  const { date, serviceId } = req.query;
+  const result = await SlotServices.getAllSlots(date as string, serviceId as string);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Slot is Created Successfully",
-    data: result,
-  });
-});
-const getSingleSlot = catchAsync(async (req, res) => {
-  const { SlotId } = req.params;
-  const result = await SlotServices.getSingleSlot(SlotId);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Slot is Created Successfully",
-    data: result,
-  });
-});
-const updateSlot = catchAsync(async (req, res) => {
-  const { serviceId } = req.params;
-
-  const result = await SlotServices.updateSlot(serviceId, req.body);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Service is Created Successfully",
-    data: result,
-  });
-});
-const deleteSlot = catchAsync(async (req, res) => {
-  const { serviceId } = req.params;
-  const result = await SlotServices.deleteSlot(serviceId);
-
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Service is Created Successfully",
+    message: "Available slots retrieved successfully",
     data: result,
   });
 });
 
 export const SlotController = {
   createSlot,
-  getAllSlots,
-  getSingleSlot,
-  updateSlot,
-  deleteSlot,
+  getAllSlots
 };
