@@ -55,7 +55,7 @@ const deleteService = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Service is Created Successfully",
+    message: "Service deleted Successfully",
     data: result,
   });
 });

@@ -14,9 +14,18 @@ router.post(
   serviceController.createService
 );
 
-router.patch("/:serviceId", auth(USER_ROLE.admin), serviceController.updateService);
+router.patch(
+  "/:serviceId",
+  auth(USER_ROLE.admin),
+  validateRequest(serviceValidation.updatedService),
+  serviceController.updateService
+);
 
-router.delete("/:serviceId", serviceController.deleteService);
+router.delete(
+  "/:serviceId",
+  auth(USER_ROLE.admin),
+  serviceController.deleteService
+);
 
 router.get("/", serviceController.getAllServices);
 
