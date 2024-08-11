@@ -14,14 +14,15 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
       throw new AppError(401, "You are not authorized to access this route");
     }
 
-    const verfiedToken = jwt.verify(
+
+    const verifiedToken = jwt.verify(
       accessToken as string,
       config.jwt_access_secret as string
     );
 
-    const { role, email } = verfiedToken as JwtPayload;
+    const { role, userId } = verifiedToken as JwtPayload;
 
-    const user = await User.findOne({ email });
+    const user = await User.findById(userId );
 
     if (!user) {
       throw new AppError(401, "User not found");
@@ -30,6 +31,8 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
     if (!requiredRoles.includes(role)) {
       throw new AppError(401, "You are not authorized to access this route");
     }
+
+    req.userId = userId;
 
     next();
   });

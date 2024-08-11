@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import jwt from "jsonwebtoken";
 import httpStatus from "http-status";
 import { User } from "../user/user.model";
 import { TLoginUser } from "./auth.interface";
 import { TUser } from "../user/user.interface";
-import { USER_ROLE } from "../user/user.constant";
 import { isPasswordMatched } from "./auth.util";
 import AppError from "../../../errors/AppError";
 import config from "../../../config";
@@ -38,7 +38,7 @@ const login = async (payload: TLoginUser) => {
   }
 
   const jwtPayload = {
-    email: user.email,
+    userId: user._id,
     role: user.role,
   };
 
