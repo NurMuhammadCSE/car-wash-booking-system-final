@@ -9,4 +9,6 @@ router.post("/", auth(USER_ROLE.user), bookingController.createBooking);
 
 router.get('/', auth(USER_ROLE.admin), bookingController.getAllBookings);
 
+router.get('/my-bookings', auth(USER_ROLE.user), bookingController.getMyBookings);
+
 export const bookingRoutes = router;

@@ -4,6 +4,7 @@ import { Service } from "../service/service.model";
 import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
 import { Slot } from "../slot/slot.mode";
+import { JwtPayload } from "jsonwebtoken";
 
 const createBooking = async (payload: TBooking) => {
   // Validate service
@@ -50,12 +51,45 @@ const createBooking = async (payload: TBooking) => {
   return populatedBooking;
 };
 
-const getAllBookings = async() => {
-  const result = await Booking.find();
+const getAllBookings = async () => {
+  const result = await Booking.find().populate([
+    {
+      path: "customer",
+      select: "_id name email phone address",
+    },
+    {
+      path: "serviceId",
+      select: "_id name description price duration isDeleted",
+    },
+    {
+      path: "slotId",
+      select: "_id service date startTime endTime isBooked",
+    },
+  ]);
+
   return result;
-}
+};
+
+const getMyBookings = async (userId: JwtPayload) => {
+  const result = await Booking.findById(userId).populate([
+    {
+      path: "customer",
+      select: "_id name email phone address",
+    },
+    {
+      path: "serviceId",
+      select: "_id name description price duration isDeleted",
+    },
+    {
+      path: "slotId",
+      select: "_id service date startTime endTime isBooked",
+    },
+  ]);
+  return result;
+};
 
 export const bookingServices = {
   createBooking,
-  getAllBookings
+  getAllBookings,
+  getMyBookings,
 };
