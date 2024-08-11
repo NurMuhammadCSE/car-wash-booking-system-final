@@ -3,10 +3,9 @@ import AppError from "../../../errors/AppError";
 import { Service } from "../service/service.model";
 import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
-import { JwtPayload } from "jsonwebtoken";
 import { Slot } from "../slot/slot.mode";
 
-const createBooking = async (payload: TBooking, userId: JwtPayload) => {
+const createBooking = async (payload: TBooking) => {
   // Validate service
   const service = await Service.findById(payload.serviceId);
   if (!service) {
@@ -51,6 +50,12 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   return populatedBooking;
 };
 
+const getAllBookings = async() => {
+  const result = await Booking.find();
+  return result;
+}
+
 export const bookingServices = {
   createBooking,
+  getAllBookings
 };

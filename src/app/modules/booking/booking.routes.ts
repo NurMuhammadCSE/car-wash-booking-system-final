@@ -7,4 +7,6 @@ const router = express.Router();
 
 router.post("/", auth(USER_ROLE.user), bookingController.createBooking);
 
+router.get('/', auth(USER_ROLE.admin), bookingController.getAllBookings);
+
 export const bookingRoutes = router;
