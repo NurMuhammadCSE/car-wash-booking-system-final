@@ -1,12 +1,13 @@
 import { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
-import handleZodError from "../errors/handleZodError";
-import handleValidationError from "../errors/handleValidationError";
-import handleCastError from "../errors/handleCastError";
-import handleDuplicateError from "../errors/handleDuplicateError";
-import AppError from "../errors/AppError";
-import { TErrorSources } from "../interface/error.interface";
-import config from "../config";
+import { TErrorSources } from "../../interface/error.interface";
+import handleZodError from "../../errors/handleZodError";
+import handleValidationError from "../../errors/handleValidationError";
+import handleCastError from "../../errors/handleCastError";
+import handleDuplicateError from "../../errors/handleDuplicateError";
+import AppError from "../../errors/AppError";
+import config from "../../config";
+
 
 const globalErrorHandler:ErrorRequestHandler = (err, req, res, next) => {
   // Setting Default Values
@@ -64,7 +65,7 @@ return res.status(statusCode).json({
     success:false,
     message,
     errorSources,
-    err,
+    // err,
     stack: config.NODE_ENV === 'development' ? err?.stack : null
 })
 };

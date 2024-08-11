@@ -4,7 +4,7 @@ import { USER_ROLE } from './user.constant';
 const createAdmin = z.object({
     body:z.object({
         name: string(),
-        role: z.nativeEnum(USER_ROLE).default(USER_ROLE.ADMIN),
+        role: z.nativeEnum(USER_ROLE).default(USER_ROLE.admin),
         email: string().email(),
         password: z.string(),
         address: z.string(),

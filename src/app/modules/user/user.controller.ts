@@ -1,6 +1,6 @@
 import httpStatus from "http-status";
 import { UserServices } from "./user.service";
-import { catchAsync } from "../../utils/catchAsync";
+import { catchAsync } from "../../../utils/catchAsync";
 
 const createAdmin = catchAsync(async (req, res) => {
   const result = await UserServices.createAdmin(req.body);
