@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-this-alias */
 import { model, Schema } from "mongoose";
 import { TUser } from "./user.interface";
 import { USER_ROLE } from "./user.constant";
@@ -44,9 +45,9 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
-userSchema.post("save", function (doc, next) {
-  doc.password = "";
-  next();
-});
+// userSchema.post("save", function (doc, next) {
+//   doc.password = "";
+//   next();
+// });
 
 export const User = model<TUser>("User", userSchema);

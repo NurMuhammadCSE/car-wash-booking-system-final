@@ -25,8 +25,10 @@ const getAllBookings = catchAsync(async (req, res) => {
   });
 });
 
-const getMyBookings = catchAsync(async (req, res) => {
-  const result = await bookingServices.getMyBookings(req.userId);
+const getUserBookings = catchAsync(async (req, res) => {
+
+  const userId = req.userId._id; // Assuming req.user is set by the auth middleware
+  const result = await bookingServices.getUserBookings(userId);
 
   sendResponse(res, {
     success: true,
@@ -39,5 +41,5 @@ const getMyBookings = catchAsync(async (req, res) => {
 export const bookingController = {
   createBooking,
   getAllBookings,
-  getMyBookings
+  getUserBookings,
 };

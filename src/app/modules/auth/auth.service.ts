@@ -9,21 +9,22 @@ import AppError from "../../../errors/AppError";
 import config from "../../../config";
 
 const signUp = async (payload: TUser) => {
-  const userExist = await User.findOne({ email: payload.email });
-
+  const userExist = await User.findOne({ email: payload.email }).select(
+    "+password"
+  );
   if (userExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "User already exists");
   }
 
-  // payload.role = USER_ROLE.USER;
-
   const result = await User.create(payload);
-  return result;
+
+  const { password, ...userWithoutPassword } = result.toObject();
+
+  return userWithoutPassword;
 };
 
 const login = async (payload: TLoginUser) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
-
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User Not Found");
   }
@@ -39,6 +40,7 @@ const login = async (payload: TLoginUser) => {
 
   const jwtPayload = {
     userId: user._id,
+    email: user.email,
     role: user.role,
   };
 
@@ -54,7 +56,6 @@ const login = async (payload: TLoginUser) => {
     }
   );
 
-  // const { password, ...another } = user;
   const { password, ...userWithoutPassword } = user.toObject();
 
   return {
