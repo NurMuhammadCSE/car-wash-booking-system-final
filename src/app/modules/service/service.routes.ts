@@ -4,6 +4,7 @@ import { auth } from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.constant";
 import validateRequest from "../../middlewares/validateRequest";
 import { serviceValidation } from "./service.validation";
+import { SlotController } from "../slot/slot.controller";
 
 const router = express.Router();
 
@@ -13,6 +14,8 @@ router.post(
   validateRequest(serviceValidation.createService),
   serviceController.createService
 );
+
+router.post("/slots", auth(USER_ROLE.admin), SlotController.createSlot);
 
 router.patch(
   "/:serviceId",
