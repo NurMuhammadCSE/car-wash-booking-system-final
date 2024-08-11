@@ -10,21 +10,24 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const accessToken = req.headers.authorization;
 
-    if (!accessToken) {
+    if (!accessToken || !accessToken.startsWith("Bearer ")) {
       throw new AppError(401, "You are not authorized to access this route");
     }
 
+    const token = accessToken.split(" ")[1];
 
     const verifiedToken = jwt.verify(
-      accessToken as string,
+      token as string,
       config.jwt_access_secret as string
     );
 
-    const { role, userId } = verifiedToken as JwtPayload;
+    // console.log(verifiedToken)
+
+    const { role, userId, email } = verifiedToken as JwtPayload;
 
     const user = await User.findById(userId );
 
-    if (!user) {
+    if (!user || !email) {
       throw new AppError(401, "User not found");
     }
 
