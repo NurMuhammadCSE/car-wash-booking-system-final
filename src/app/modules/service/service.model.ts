@@ -26,6 +26,8 @@ const serviceSchema = new Schema<TService>(
   },
   {
     timestamps: true,
+    // toJSON: { virtuals: true }, 
+    // toObject: { virtuals: true }, 
   }
 );
 

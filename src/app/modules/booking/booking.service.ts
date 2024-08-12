@@ -4,50 +4,77 @@ import { Service } from "../service/service.model";
 import { TBooking } from "./booking.interface";
 import { Booking } from "./booking.model";
 import { Slot } from "../slot/slot.mode";
+import { JwtPayload } from "jsonwebtoken";
+import { User } from "../user/user.model";
+import mongoose from "mongoose";
 
-const createBooking = async (payload: TBooking) => {
-  // Validate service
-  const service = await Service.findById(payload.serviceId);
-  if (!service) {
-    throw new AppError(httpStatus.NOT_FOUND, "Service not found");
+const createBooking = async (payload: TBooking, userId: JwtPayload) => {
+  // Validate the service exists
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const service = await Service.findById(payload.serviceId).session(session);
+    if (!service) {
+      throw new AppError(httpStatus.NOT_FOUND, "Service not found");
+    }
+
+    // Validate the user exists
+    const userExists = await User.findById(userId).session(session);
+    if (!userExists) {
+      throw new AppError(httpStatus.NOT_FOUND, "User not found");
+    }
+
+    // Validate the slot exists
+    const slot = await Slot.findById(payload.slotId).session(session);
+    if (!slot) {
+      throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
+    }
+
+    // Ensure the slot is available
+    if (slot.isBooked !== "available") {
+      throw new AppError(httpStatus.BAD_REQUEST, "Slot is already booked");
+    }
+
+    // Update slot status to booked
+    slot.isBooked = "booked";
+    await slot.save();
+
+    // Create the booking
+    const bookingPayload = { ...payload, customer: userId };
+    const booking = await Booking.create(bookingPayload);
+
+    // Populate related fields
+    const populatedBooking = await booking.populate([
+      {
+        path: "customer",
+        select: "_id name email phone address",
+      },
+      {
+        path: "service",
+        select: "_id name description price duration isDeleted",
+      },
+      {
+        path: "slot",
+        select: "_id service date startTime endTime isBooked",
+      },
+    ]);
+
+    //! Every Property Printed
+    // const populatedBooking = (
+    //   await (await booking.populate("customer")).populate("service")
+    // ).populate("slot");
+
+    await session.commitTransaction();
+    await session.endSession();
+    return populatedBooking;
+  } catch (err) {
+    console.log(err);
+    await session.abortTransaction();
+    session.endSession();
+    throw new Error("Failed to create booking");
   }
-
-  // Validate slot
-  const slot = await Slot.findById(payload.slotId);
-  if (!slot) {
-    throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
-  }
-
-  // Ensure that the slot is available before booking
-  if (slot.isBooked !== "available") {
-    throw new AppError(httpStatus.BAD_REQUEST, "Slot is already booked");
-  }
-
-  // Update the slot status to booked
-  slot.isBooked = "booked";
-  await slot.save();
-
-  // Create the booking with the customer (user) ID
-  // const bookingPayload = { ...payload, customer: userId.sub };
-  const booking = await Booking.create(payload);
-
-  // Populate related fields
-  const populatedBooking = await booking.populate([
-    {
-      path: "customer",
-      select: "_id name email phone address",
-    },
-    {
-      path: "serviceId",
-      select: "_id name description price duration isDeleted",
-    },
-    {
-      path: "slotId",
-      select: "_id service date startTime endTime isBooked",
-    },
-  ]);
-
-  return populatedBooking;
 };
 
 const getAllBookings = async () => {
@@ -57,11 +84,11 @@ const getAllBookings = async () => {
       select: "_id name email phone address",
     },
     {
-      path: "serviceId",
+      path: "service",
       select: "_id name description price duration isDeleted",
     },
     {
-      path: "slotId",
+      path: "slot",
       select: "_id service date startTime endTime isBooked",
     },
   ]);
@@ -72,11 +99,11 @@ const getAllBookings = async () => {
 const getUserBookings = async (userId: string) => {
   const bookings = await Booking.find({ customer: userId })
     .populate({
-      path: "serviceId",
+      path: "service",
       select: "_id name description price duration isDeleted",
     })
     .populate({
-      path: "slotId",
+      path: "slot",
       select: "_id service date startTime endTime isBooked",
     });
 

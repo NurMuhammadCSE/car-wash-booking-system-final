@@ -16,18 +16,10 @@ const bookingSchema = new Schema<TBooking>(
       ref: "Slot",
     },
     vehicleType: {
-      type: String, // Adding type for the vehicleType field
+      type: String,
       enum: [
-        "car",
-        "truck",
-        "SUV",
-        "van",
-        "motorcycle",
-        "bus",
-        "electricVehicle",
-        "hybridVehicle",
-        "bicycle",
-        "tractor",
+        "car", "truck", "SUV", "van", "motorcycle", "bus",
+        "electricVehicle", "hybridVehicle", "bicycle", "tractor"
       ],
       required: true,
     },
@@ -40,7 +32,7 @@ const bookingSchema = new Schema<TBooking>(
       required: true,
     },
     manufacturingYear: {
-      type: String,
+      type: Number,
       required: true,
     },
     registrationPlate: {
@@ -49,8 +41,33 @@ const bookingSchema = new Schema<TBooking>(
     },
   },
   {
-    timestamps: true, // Add this option to automatically manage createdAt and updatedAt fields
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      transform: function (doc, ret) {
+        delete ret.serviceId;
+        delete ret.slotId;   
+        delete ret.__v;  
+        return ret;
+      }
+    }
   }
 );
+
+// Virtual populate for service
+bookingSchema.virtual('service', {
+  ref: 'Service',
+  localField: 'serviceId',
+  foreignField: '_id',
+  justOne: true,
+});
+
+// Virtual populate for slot
+bookingSchema.virtual('slot', {
+  ref: 'Slot',
+  localField: 'slotId',
+  foreignField: '_id',
+  justOne: true,
+});
 
 export const Booking = model<TBooking>("Booking", bookingSchema);

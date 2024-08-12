@@ -20,14 +20,16 @@ const slotSchema = new Schema<TSlot>(
       type: String,
       required: true,
     },
-    isBooked:{
-      type:String,
+    isBooked: {
+      type: String,
       required: true,
       enum: ["available", "booked", "cancel"], // Corrected enum syntax
-    }
+    },
   },
   {
     timestamps: true,
+    // toJSON: { virtuals: true },
+    // toObject: { virtuals: true },
   }
 );
 

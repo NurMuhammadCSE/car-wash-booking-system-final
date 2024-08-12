@@ -10,9 +10,10 @@ const createSlot = async (payload: TSlot) => {
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-    const service = await Service.findById(payload.service);
+
+    const service = await Service.findById(payload.service).session(session);
     if (!service) {
-      throw new AppError(httpStatus.NOT_FOUND, "Service is Not Found");
+      throw new AppError(httpStatus.NOT_FOUND, "Service is not found");
     }
 
     // Assume service duration is in minutes (e.g., 60 minutes)
@@ -31,7 +32,6 @@ const createSlot = async (payload: TSlot) => {
     // Calculate the number of slots
     const numberOfSlots = totalDuration / serviceDuration;
 
-    // Generate the slots
     const slots = [];
     let currentStartTime = startTotalMinutes;
 
@@ -50,25 +50,50 @@ const createSlot = async (payload: TSlot) => {
       );
       const endMinuteStr = String(currentEndTime % 60).padStart(2, "0");
 
-      const slot = await Slot.create({
-        service: payload.service,
-        date: payload.date,
-        startTime: `${startHourStr}:${startMinuteStr}`,
-        endTime: `${endHourStr}:${endMinuteStr}`,
-        isBooked: "available",
-      });
+      const slotStartTime = `${startHourStr}:${startMinuteStr}`;
+      const slotEndTime = `${endHourStr}:${endMinuteStr}`;
 
-      slots.push(slot);
+      // // Check for overlapping slots
+      // const existingSlot = await Slot.findOne({
+      //   service: payload.service,
+      //   date: payload.date,
+      //   startTime: { $lt: slotEndTime },
+      //   endTime: { $gt: slotStartTime },
+      // }).session(session);
+
+      // if (existingSlot) {
+      //   throw new AppError(
+      //     httpStatus.CONFLICT,
+      //     "Slot timing conflicts with an existing slot"
+      //   );
+      // }
+
+      // Create the slot if no conflicts are found
+      const slot = await Slot.create(
+        [
+          {
+            service: payload.service,
+            date: payload.date,
+            startTime: slotStartTime,
+            endTime: slotEndTime,
+            isBooked: "available",
+          },
+        ],
+        { session }
+      );
+
+      slots.push(slot[0]);
       currentStartTime = currentEndTime;
     }
+
     await session.commitTransaction();
-    await session.endSession();
     return slots;
   } catch (err) {
     console.log(err);
     await session.abortTransaction();
-    await session.endSession();
-    throw new Error("Failed to Create Slots");
+    throw new Error("Failed to create slots");
+  } finally {
+    session.endSession();
   }
 };
 

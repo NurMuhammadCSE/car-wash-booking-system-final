@@ -1,4 +1,4 @@
-import z from "zod";
+import { z } from "zod";
 
 const createSlot = z.object({
   body: z.object({
@@ -13,10 +13,7 @@ const createSlot = z.object({
     }),
     endTime: z.string({
       required_error: "End time is required",
-    }),
-    isBooked: z.enum(["available", "booked", "cancel"], {
-      required_error: "Booking status is required",
-    }),
+    })
   }),
 });
 
