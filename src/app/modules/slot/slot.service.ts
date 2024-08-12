@@ -7,14 +7,15 @@ import { Slot } from "./slot.mode";
 import mongoose from "mongoose";
 
 const createSlot = async (payload: TSlot) => {
+
+  const service = await Service.findById(payload.service);
+  if (!service) {
+    throw new AppError(httpStatus.NOT_FOUND, "Service not found");
+  }
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
-
-    const service = await Service.findById(payload.service).session(session);
-    if (!service) {
-      throw new AppError(httpStatus.NOT_FOUND, "Service is not found");
-    }
 
     // Assume service duration is in minutes (e.g., 60 minutes)
     const serviceDuration = service.duration;

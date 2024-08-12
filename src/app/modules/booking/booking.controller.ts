@@ -4,7 +4,7 @@ import sendResponse from "../../../utils/sendResponse";
 import { bookingServices } from "./booking.service";
 
 const createBooking = catchAsync(async (req, res) => {
-  const userId = req.userId; // Assuming req.user is set by the auth middleware
+  const userId = req.userId;
   const result = await bookingServices.createBooking(req.body, userId);
 
   sendResponse(res, {
@@ -28,7 +28,7 @@ const getAllBookings = catchAsync(async (req, res) => {
 
 const getUserBookings = catchAsync(async (req, res) => {
 
-  const userId = req.userId._id; // Assuming req.user is set by the auth middleware
+  const userId = req.userId; // Assuming req.user is set by the auth middleware
   const result = await bookingServices.getUserBookings(userId);
 
   sendResponse(res, {

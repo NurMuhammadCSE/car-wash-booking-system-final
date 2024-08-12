@@ -5,6 +5,11 @@ import { Service } from "./service.model";
 import mongoose from "mongoose";
 
 const createService = async (payload: TService) => {
+  const isExist = await Service.findOne({ name: payload.name });
+  if (isExist) {
+    throw new AppError(httpStatus.CONFLICT, "This Service is Already Exist");
+  }
+
   const result = await Service.create(payload);
   return result;
 };
@@ -27,6 +32,12 @@ const updateService = async (id: string, payload: Partial<TService>) => {
   if (!service) {
     throw new AppError(httpStatus.NOT_FOUND, "Service is not Found");
   }
+
+  const isExist = await Service.findOne({ name: payload.name });
+  if (isExist) {
+    throw new AppError(httpStatus.CONFLICT, "This Service is Already Exist");
+  }
+
   const result = await Service.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
@@ -45,8 +56,12 @@ const updateService = async (id: string, payload: Partial<TService>) => {
 // };
 
 const deleteService = async (id: string) => {
+  const service = await Service.findById(id);
+  if (!service) {
+    throw new AppError(httpStatus.NOT_FOUND, "Service is not Found");
+  }
+  
   const session = await mongoose.startSession();
-
   try {
     session.startTransaction();
 
@@ -54,12 +69,8 @@ const deleteService = async (id: string) => {
     const service = await Service.findByIdAndUpdate(
       id,
       { isDeleted: true },
-      { new: true, session }
+      { new: true }
     );
-
-    if (!service) {
-      throw new AppError(httpStatus.NOT_FOUND, "Service not found");
-    }
 
     await session.commitTransaction();
     await session.endSession();
@@ -69,7 +80,7 @@ const deleteService = async (id: string) => {
     console.error(err);
     await session.abortTransaction();
     await session.endSession();
-    throw new Error("Failed to delete service");
+    throw new AppError(httpStatus.NOT_FOUND, "Service not found");
   }
 };
 

@@ -26,8 +26,8 @@ const serviceSchema = new Schema<TService>(
   },
   {
     timestamps: true,
-    // toJSON: { virtuals: true }, 
-    // toObject: { virtuals: true }, 
+    // toJSON: { virtuals: true },
+    // toObject: { virtuals: true },
   }
 );
 
@@ -42,7 +42,7 @@ serviceSchema.pre("findOne", function (next) {
   next();
 });
 
-serviceSchema.pre('aggregate', function (next) {
+serviceSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });

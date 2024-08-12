@@ -8,13 +8,17 @@ import { bookingValidation } from "./booking.validation";
 const router = express.Router();
 
 router.post(
-  "/",
+  "/bookings",
   auth(USER_ROLE.user),
   validateRequest(bookingValidation.createBooking),
   bookingController.createBooking
 );
 
-router.get("/", auth(USER_ROLE.admin), bookingController.getAllBookings);
+router.get(
+  "/bookings",
+  auth(USER_ROLE.admin),
+  bookingController.getAllBookings
+);
 
 router.get(
   "/my-bookings",
