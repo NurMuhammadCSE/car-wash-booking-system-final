@@ -3,11 +3,11 @@ import { UserServices } from "./user.service";
 import { catchAsync } from "../../../utils/catchAsync";
 
 const createAdmin = catchAsync(async (req, res) => {
-  const result = await UserServices.createAdmin(req.body);
+  const result = await UserServices.createUser(req.body);
 
   res.status(httpStatus.OK).json({
     success: true,
-    message: "Admin is created Successfully",
+    message: "User is created Successfully",
     data: result,
   });
 });

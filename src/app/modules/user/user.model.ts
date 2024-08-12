@@ -13,20 +13,20 @@ export const userSchema = new Schema<TUser>(
     },
     email: {
       type: String,
-      required: [true, "Name is Required"],
+      required: [true, "Email is Required"],
       unique: true,
     },
     password: {
       type: String,
-      required: [true, "Name is Required"],
+      required: [true, "Password is Required"],
     },
     phone: {
       type: String,
-      required: [true, "Name is Required"],
+      required: [true, "Phone Number is Required"],
     },
     role: {
       type: String,
-      required: [true, "Name is Required"],
+      required: [true, "Role is Required"],
       enum: Object.keys(USER_ROLE),
     },
     address: {
