@@ -4,7 +4,7 @@
 
 [Car Washing System](https://car-washing-system-blush.vercel.app/)
 
-Welcome to the **Car Washing Booking System**! This project is designed to manage and streamline the process of booking services through an intuitive and efficient backend system. Built with modern technologies like **Node.js**, **Express.js**, **TypeScript**, and **MongoDB**, this application provides robust functionality for managing users, services, slots, and bookings.
+Welcome to the **Car Washing Booking System**! This project is designed to manage and streamline the process of booking services through an intuitive and efficient backend system. Built with modern technologies like **Node.js**, **Express.js**, **TypeScript**, and **Mongoose**, this application provides robust functionality for managing users, services, slots, and bookings.
 
 ## Key Features
 
