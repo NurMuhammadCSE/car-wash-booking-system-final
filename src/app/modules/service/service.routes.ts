@@ -5,6 +5,7 @@ import { USER_ROLE } from "../user/user.constant";
 import validateRequest from "../../middlewares/validateRequest";
 import { serviceValidation } from "./service.validation";
 import { SlotController } from "../slot/slot.controller";
+import { slotValidation } from "../slot/slot.validation";
 
 const router = express.Router();
 
@@ -15,7 +16,12 @@ router.post(
   serviceController.createService
 );
 
-router.post("/slots", auth(USER_ROLE.admin), SlotController.createSlot);
+router.post(
+  "/slots",
+  validateRequest(slotValidation.createSlot),
+  auth(USER_ROLE.admin),
+  SlotController.createSlot
+);
 
 router.patch(
   "/:serviceId",
