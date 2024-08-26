@@ -1,7 +1,11 @@
+import { Types } from "mongoose";
+
 export type TService = {
-    name: string;
-    description: string;
-    price: number;
-    duration: number;
-    isDeleted: boolean;
-}
+  _id: Types.ObjectId;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  duration: number;
+  isDeleted: boolean;
+};

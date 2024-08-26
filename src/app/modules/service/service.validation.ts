@@ -7,6 +7,11 @@ const createService = z.object({
         required_error: "Name is required",
       })
       .min(1, "Name cannot be empty"),
+    image: z
+      .string({
+        required_error: "Image is required",
+      })
+      .min(1, "Image cannot be empty"),
     description: z.string().optional(),
     price: z
       .number({

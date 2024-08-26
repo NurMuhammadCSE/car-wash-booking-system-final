@@ -3,6 +3,7 @@ import AppError from "../../../errors/AppError";
 import { TService } from "./service.interface";
 import { Service } from "./service.model";
 import mongoose from "mongoose";
+import QueryBuilder from "../../builder/QueryBuilder";
 
 const createService = async (payload: TService) => {
   const isExist = await Service.findOne({ name: payload.name });
@@ -14,8 +15,31 @@ const createService = async (payload: TService) => {
   return result;
 };
 
-const getAllServices = async () => {
-  const result = await Service.find();
+const getAllServices = async (query: Record<string, unknown>) => {
+  const serviceQuery = new QueryBuilder(Service.find(), query)
+    .search(["name", "description"])
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+
+  const result = await serviceQuery.modelQuery;
+
+  // let searchTerm = "";
+  // if (query?.searchTerm) {
+  //   searchTerm = query.searchTerm as string;
+  // }
+
+  // const searchableFields = ["name", "description"];
+  // // {title: {$regex: searchTerm}}
+  // // {genre: {$regex: searchTerm}}
+
+  // const result = await Service.find({
+  //   $or: searchableFields.map((field) => ({
+  //     [field]: { $regex: searchTerm, $options: "i" },
+  //   })),
+  // });
+
   return result;
 };
 
@@ -60,7 +84,7 @@ const deleteService = async (id: string) => {
   if (!service) {
     throw new AppError(httpStatus.NOT_FOUND, "Service is not Found");
   }
-  
+
   const session = await mongoose.startSession();
   try {
     session.startTransaction();
