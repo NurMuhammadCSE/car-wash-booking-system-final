@@ -6,6 +6,7 @@ import { Booking } from "./booking.model";
 import { Slot } from "../slot/slot.mode";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
+import { initiatePayment } from "../payment/payment.utils";
 
 const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   // Validate the service exists
@@ -15,8 +16,8 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   }
 
   // Validate the user exists
-  const userExists = await User.findById(userId);
-  if (!userExists) {
+  const user = await User.findById(userId);
+  if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
   }
 
@@ -31,13 +32,28 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
     throw new AppError(httpStatus.BAD_REQUEST, "Slot is already booked");
   }
 
-  // Update slot status to booked
-  // slot.isBooked = "booked";
-  // await slot.save();
-
   // Create the booking
   const bookingPayload = { ...payload, customer: userId };
   const booking = await Booking.create(bookingPayload);
+
+  const transactionId = `TXN-${Date.now()}`;
+
+  const paymentData = {
+    transactionId,
+    totalPrice: service.price, // Assuming the service price is the total price
+    customerName: user.name,
+    customerEmail: user.email,
+    customerPhone: user.phone,
+    customerAddress: user.address,
+  };
+
+  //! Payment
+  const paymentSession = await initiatePayment(paymentData);
+  // console.log(paymentSession);
+
+  // Update slot status to booked
+  slot.isBooked = "booked";
+  await slot.save();
 
   // Populate related fields
   const populatedBooking = await booking.populate([
@@ -55,11 +71,7 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
     },
   ]);
 
-  //! Every Property Printed
-  // const populatedBooking = (
-  //   await (await booking.populate("customer")).populate("service")
-  // ).populate("slot");
-  return populatedBooking;
+  return { populatedBooking, paymentSession };
 };
 
 const getAllBookings = async () => {
@@ -82,7 +94,8 @@ const getAllBookings = async () => {
 };
 
 const getUserBookings = async (userId: JwtPayload) => {
-  const bookings = await Booking.find({ customer: userId }).select("-customer")
+  const bookings = await Booking.find({ customer: userId })
+    .select("-customer")
     .populate({
       path: "service",
       select: "_id name description price duration isDeleted",
@@ -90,8 +103,8 @@ const getUserBookings = async (userId: JwtPayload) => {
     .populate({
       path: "slot",
       select: "_id service date startTime endTime isBooked",
-    })
-    // .lean();
+    });
+  // .lean();
 
   return bookings;
 };
