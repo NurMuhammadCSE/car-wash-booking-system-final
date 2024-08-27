@@ -32,8 +32,8 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   }
 
   // Update slot status to booked
-  slot.isBooked = "booked";
-  await slot.save();
+  // slot.isBooked = "booked";
+  // await slot.save();
 
   // Create the booking
   const bookingPayload = { ...payload, customer: userId };
@@ -47,7 +47,7 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
     },
     {
       path: "service",
-      select: "_id name description price duration isDeleted",
+      select: "_id name description image price duration isDeleted",
     },
     {
       path: "slot",

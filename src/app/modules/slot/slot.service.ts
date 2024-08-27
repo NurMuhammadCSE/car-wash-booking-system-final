@@ -99,7 +99,9 @@ const createSlot = async (payload: TSlot) => {
 };
 
 const getAllSlots = async (date?: string, serviceId?: string) => {
-  const filter: any = { isBooked: "available" };
+  // const filter: any = { isBooked: "available" };
+  const filter: any = {};
+
   if (date) {
     filter.date = new Date(date);
   }
@@ -112,7 +114,22 @@ const getAllSlots = async (date?: string, serviceId?: string) => {
   return slots;
 };
 
+const getSingleSlot = async (id: string) => {
+  try {
+    const slot = await Slot.findById(id).populate("service");
+    if (!slot) {
+      throw new Error("Slot not found");
+    }
+    return slot;
+  } catch (error) {
+    console.error("Error retrieving slot:", error);
+    throw error;
+  }
+};
+
+
 export const SlotServices = {
   createSlot,
   getAllSlots,
+  getSingleSlot
 };

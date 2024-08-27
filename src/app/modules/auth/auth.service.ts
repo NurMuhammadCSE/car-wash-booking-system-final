@@ -15,7 +15,7 @@ const signUp = async (payload: TUser) => {
   if (userExist) {
     throw new AppError(httpStatus.BAD_REQUEST, "User already exists");
   }
-
+  payload.role = "user";
   const result = await User.create(payload);
 
   const { password, ...userWithoutPassword } = result.toObject();
@@ -40,9 +40,12 @@ const login = async (payload: TLoginUser) => {
 
   const jwtPayload = {
     userId: user._id,
+    name: user.name,
     email: user.email,
     role: user.role,
   };
+
+  console.log(jwtPayload)
 
   const accessToken = jwt.sign(jwtPayload, config.jwt_access_secret as string, {
     expiresIn: config.jwt_access_expires_in,

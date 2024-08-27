@@ -21,11 +21,11 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
       config.jwt_access_secret as string
     );
 
-    // console.log(verifiedToken)
+    console.log(verifiedToken);
 
-    const { role, userId, email } = verifiedToken as JwtPayload;
+    const { role, userId, email, name } = verifiedToken as JwtPayload;
 
-    const user = await User.findById(userId );
+    const user = await User.findById(userId);
 
     if (!user || !email) {
       throw new AppError(401, "User not found");
@@ -36,6 +36,7 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
     }
 
     req.userId = userId;
+    req.name = name;
 
     next();
   });
