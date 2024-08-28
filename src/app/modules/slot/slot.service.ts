@@ -7,7 +7,6 @@ import { Slot } from "./slot.mode";
 import mongoose from "mongoose";
 
 const createSlot = async (payload: TSlot) => {
-
   const service = await Service.findById(payload.service);
   if (!service) {
     throw new AppError(httpStatus.NOT_FOUND, "Service not found");
@@ -127,9 +126,31 @@ const getSingleSlot = async (id: string) => {
   }
 };
 
+const updateSlotStatus = async (id: string, status: string) => {
+  const slot = await Slot.findById(id);
+  
+  if (!slot) {
+    throw new AppError(httpStatus.NOT_FOUND, "Slot not found");
+  }
+
+  // Check if the slot is already booked
+  if (slot.isBooked === 'booked') {
+    throw new AppError(httpStatus.BAD_REQUEST, "Cannot update a booked slot");
+  }
+
+  // Only allow status to be updated to 'available' or 'cancelled'
+  if (status !== 'available' && status !== 'cancelled') {
+    throw new AppError(httpStatus.BAD_REQUEST, "Invalid status update");
+  }
+
+  slot.isBooked = status;
+  await slot.save();
+  return slot;
+};
 
 export const SlotServices = {
   createSlot,
   getAllSlots,
-  getSingleSlot
+  getSingleSlot,
+  updateSlotStatus,
 };
