@@ -1,38 +1,39 @@
 # Car Washing Booking System
 
-## Live Demo
+## 🚀 Live Demo
 
-[Car Washing System](https://car-washing-system-blush.vercel.app/)
+- [Frontend - Car Washing Booking System](https://car-washing-booking.web.app/)
+- [Backend - Car Washing Booking System Server](https://car-washing-system-blush.vercel.app/)
 
-Welcome to the **Car Washing Booking System**! This project is designed to manage and streamline the process of booking services through an intuitive and efficient backend system. Built with modern technologies like **Node.js**, **Express.js**, **TypeScript**, and **Mongoose**, this application provides robust functionality for managing users, services, slots, and bookings.
+Welcome to the **Car Washing Booking System**! This project revolutionizes the car washing booking experience by offering an intuitive and efficient system for managing services. Developed with cutting-edge technologies, this system is designed to streamline your booking process with ease and reliability.
 
-## Key Features
+## 🌟 Key Features
 
-- **Service Management:** Easily manage services with full CRUD functionality. Each service includes detailed information like name, description, price, and duration.
-- **Slot Management:** Manage service slots with precise control over booking statuses (available, booked, or canceled).
-- **Booking System:** Users can book services by selecting available slots. The system ensures that slots are not double-booked and automatically updates the booking status.
-- **User Authentication:** Secure user authentication using JWT. The system validates users before allowing bookings.
-- **Comprehensive Data Handling:** Responses include fully populated fields for services, slots, and user details, providing a complete overview of each booking.
-- **Error Handling:** Detailed error handling to ensure a smooth user experience, with custom error messages for missing services, users, or slots.
+- **Service Management:** Effortlessly manage services with full CRUD functionality. Each service includes comprehensive details like name, description, price, and duration.
+- **Slot Management:** Control service slots with precise management of booking statuses (available, booked, or canceled).
+- **Booking System:** Book services seamlessly by selecting available slots. The system prevents double-booking and keeps booking statuses up-to-date.
+- **User Authentication:** Secure authentication using JWT ensures that only validated users can make bookings.
+- **Comprehensive Data Handling:** Responses include detailed information on services, slots, and users, giving a complete view of each booking.
+- **Error Handling:** Robust error handling with custom messages for missing services, users, or slots, ensuring a smooth user experience.
 
-## Technologies Used
+## 💻 Technologies Used
 
-- **Node.js & Express.js:** Backend framework for building the RESTful APIs.
-- **TypeScript:** Ensures type safety and enhances the development experience.
-- **MongoDB & Mongoose:** Database and ODM for data persistence and management.
-- **Zod:** Schema validation to enforce data integrity.
-- **JWT:** Secure authentication for users.
+- **Node.js & Express.js:** Power the backend with RESTful APIs for robust functionality.
+- **TypeScript:** Provides type safety and enhances development efficiency.
+- **MongoDB & Mongoose:** Manage data persistence with a flexible NoSQL database and ODM.
+- **Zod:** Enforces data integrity with schema validation.
+- **JWT:** Handles secure user authentication.
 
-## How It Works
+## 🚀 How It Works
 
-1. **Service Creation:** Admins can create services with detailed information like price and duration.
-2. **Slot Allocation:** Admins assign available time slots for each service.
-3. **User Booking:** Users can book services by selecting an available slot. The system ensures the slot is not already booked.
-4. **Booking Management:** Users can view their bookings, including detailed information about the service, slot, and booking status.
+1. **Service Creation:** Admins can create and configure services, including setting prices and durations.
+2. **Slot Allocation:** Admins assign and manage available time slots for each service.
+3. **User Booking:** Users select from available slots to book services, with the system ensuring no double bookings.
+4. **Booking Management:** Users can view and manage their bookings, including detailed information on services, slots, and statuses.
 
-## Installation & Setup
+## 📥 Installation & Setup
 
-To get started with the project, clone the repository and follow the setup instructions provided. Ensure that you have Node.js and MongoDB installed.
+To get started, clone the repository and follow these steps:
 
 ```bash
 git clone <repository-url>
