@@ -57,10 +57,10 @@ const updateService = async (id: string, payload: Partial<TService>) => {
     throw new AppError(httpStatus.NOT_FOUND, "Service is not Found");
   }
 
-  const isExist = await Service.findOne({ name: payload.name });
-  if (isExist) {
-    throw new AppError(httpStatus.CONFLICT, "This Service is Already Exist");
-  }
+  // const isExist = await Service.findOne({ name: payload.name });
+  // if (isExist) {
+  //   throw new AppError(httpStatus.CONFLICT, "This Service is Already Exist");
+  // }
 
   const result = await Service.findByIdAndUpdate(id, payload, { new: true });
   return result;

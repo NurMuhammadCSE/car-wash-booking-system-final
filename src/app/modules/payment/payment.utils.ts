@@ -12,8 +12,7 @@ export const initiatePayment = async (paymentData: any) => {
       signature_key: process.env.SIGNATURE_KEY,
       tran_id: paymentData.transactionId,
       //   success_url: `http://localhost:5000/api/payment/confirmation?transactionId=${paymentData.transactionId}`,
-      success_url: `http://localhost:5173/success`,
-      //   success_url: `http://localhost:5000/api/payment/confirmation`,
+        success_url: `http://localhost:5000/api/payment/confirmation`,
       fail_url: `http://localhost:5173/`,
       cancel_url: "http://localhost:5173/",
       amount: paymentData.totalPrice,
@@ -52,6 +51,7 @@ export const verifyPayment = async (tnxId: string) => {
 
     return response.data;
   } catch (err) {
+    console.log(err)
     throw new Error("Payment validation failed!");
   }
 };

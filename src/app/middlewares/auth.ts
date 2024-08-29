@@ -57,11 +57,11 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
       config.jwt_access_secret as string
     );
 
-    console.log('Verified Token Payload:', verifiedToken); // Log the token payload
+    // console.log('Verified Token Payload:', verifiedToken); // Log the token payload
 
     const { role, userId, email, name } = verifiedToken as JwtPayload;
 
-    console.log('Extracted Name:', name); // Log the name to ensure it is extracted
+    // console.log('Extracted Name:', name); // Log the name to ensure it is extracted
 
     const user = await User.findById(userId);
 
@@ -79,4 +79,3 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
     next();
   });
 };
-
