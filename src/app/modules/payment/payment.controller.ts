@@ -18,7 +18,7 @@ const confirmationController = async (req: Request, res: Response) => {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <a href="http://localhost:5173/" style="background-color: #16a34a; color: white; padding: 0.5rem 1.5rem; border-radius: 0.375rem; text-decoration: none; display: inline-block; transition: background-color 0.2s;">
+        <a href="https://car-washing-booking.web.app/" style="background-color: #16a34a; color: white; padding: 0.5rem 1.5rem; border-radius: 0.375rem; text-decoration: none; display: inline-block; transition: background-color 0.2s;">
           Go to Home
         </a>
       </div>
