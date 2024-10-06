@@ -15,30 +15,30 @@ const bookingSchema = new Schema<TBooking>(
       type: Schema.Types.ObjectId,
       ref: "Slot",
     },
-    // vehicleType: {
-    //   type: String,
-    //   enum: [
-    //     "car", "truck", "SUV", "van", "motorcycle", "bus",
-    //     "electricVehicle", "hybridVehicle", "bicycle", "tractor"
-    //   ],
-    //   required: true,
-    // },
-    // vehicleBrand: {
-    //   type: String,
-    //   required: true,
-    // },
-    // vehicleModel: {
-    //   type: String,
-    //   required: true,
-    // },
-    // manufacturingYear: {
-    //   type: Number,
-    //   required: true,
-    // },
-    // registrationPlate: {
-    //   type: String,
-    //   required: true,
-    // },
+    vehicleType: {
+      type: String,
+      enum: [
+        "car", "truck", "SUV", "van", "motorcycle", "bus",
+        "electricVehicle", "hybridVehicle", "bicycle", "tractor"
+      ],
+      required: true,
+    },
+    vehicleBrand: {
+      type: String,
+      required: true,
+    },
+    vehicleModel: {
+      type: String,
+      required: true,
+    },
+    manufacturingYear: {
+      type: Number,
+      required: true,
+    },
+    registrationPlate: {
+      type: String,
+      required: true,
+    },
   },
   {
     timestamps: true,

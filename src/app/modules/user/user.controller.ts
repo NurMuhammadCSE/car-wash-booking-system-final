@@ -50,9 +50,46 @@ const updateUserRole = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const user = await UserServices.userUpdate(userId, req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "User updated successfully",
+    data: user,
+  });
+});
+
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  const userData = req.user;
+  console.log(req.user);
+  const { oldPassword, newPassword } = req.body;
+  const { ...passwordData } = req.body;
+
+  // Call the service function to change the password
+  // const result = await UserServices.changePassword(userData, {
+  //   oldPassword,
+  //   newPassword,
+  // });
+
+  const result = await UserServices.changePassword(req.user, passwordData);
+
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password changed successfully",
+    data: result,
+  });
+});
+
 export const UserController = {
   createUser,
   getAllUsers,
   getUserBookings,
   updateUserRole,
+  updateUser,
+  changePassword,
 };

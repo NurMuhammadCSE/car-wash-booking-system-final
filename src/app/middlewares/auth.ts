@@ -75,6 +75,7 @@ export const auth = (...requiredRoles: (keyof typeof USER_ROLE)[]) => {
 
     req.userId = userId;
     req.name = name;
+    req.user = user;
 
     next();
   });

@@ -2,6 +2,8 @@ import { authServices } from "./auth.service";
 import httpStatus from "http-status";
 import { catchAsync } from "../../../utils/catchAsync";
 import config from "../../../config";
+import sendResponse from "../../../utils/sendResponse";
+import { Request, Response } from "express";
 
 const signUp = catchAsync(async (req, res) => {
   const result = await authServices.signUp(req.body);
@@ -33,7 +35,31 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
+const changePassword = catchAsync(async (req: Request, res: Response) => {
+  // const userData = req.user;
+  // const { oldPassword, newPassword } = req.body;
+  // console.log(req.userId);
+  const { ...passwordData } = req.body;
+
+  // Call the service function to change the password
+  // const result = await UserServices.changePassword(userData, {
+  //   oldPassword,
+  //   newPassword,
+  // });
+
+  const result = await authServices.changePassword(req.userId, passwordData);
+
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Password changed successfully",
+    data: result,
+  });
+});
+
 export const authController = {
   signUp,
   login,
+  changePassword
 };

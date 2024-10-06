@@ -6,7 +6,7 @@ import { Booking } from "./booking.model";
 import { Slot } from "../slot/slot.mode";
 import { JwtPayload } from "jsonwebtoken";
 import { User } from "../user/user.model";
-import { initiatePayment } from "../payment/payment.utils";
+// import { initiatePayment } from "../payment/payment.utils";
 
 const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   // Validate the service exists
@@ -36,19 +36,19 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
   const bookingPayload = { ...payload, customer: userId };
   const booking = await Booking.create(bookingPayload);
 
-  const transactionId = `TXN-${Date.now()}`;
+  // const transactionId = `TXN-${Date.now()}`;
 
-  const paymentData = {
-    transactionId,
-    totalPrice: service.price, // Assuming the service price is the total price
-    customerName: user.name,
-    customerEmail: user.email,
-    customerPhone: user.phone,
-    customerAddress: user.address,
-  };
+  // const paymentData = {
+  //   transactionId,
+  //   totalPrice: service.price, // Assuming the service price is the total price
+  //   customerName: user.name,
+  //   customerEmail: user.email,
+  //   customerPhone: user.phone,
+  //   customerAddress: user.address,
+  // };
 
   //! Payment
-  const paymentSession = await initiatePayment(paymentData);
+  // const paymentSession = await initiatePayment(paymentData);
   // console.log(paymentSession);
 
   // Update slot status to booked
@@ -71,7 +71,8 @@ const createBooking = async (payload: TBooking, userId: JwtPayload) => {
     },
   ]);
 
-  return { populatedBooking, paymentSession };
+  // return { populatedBooking, paymentSession };
+  return populatedBooking;
 };
 
 const getAllBookings = async () => {

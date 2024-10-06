@@ -6,7 +6,7 @@ const createUser = z.object({
     name: z.string({
       required_error: "Name is required",
     }),
-    role: z.nativeEnum(USER_ROLE).default(USER_ROLE.admin),
+    role: z.nativeEnum(USER_ROLE).default(USER_ROLE.user),
     email: z
       .string({
         required_error: "Email is required",
@@ -23,6 +23,30 @@ const createUser = z.object({
     }),
   }),
 });
+
+const UpdateUser = z.object({
+  body: z.object({
+    name: z.string({
+      required_error: "Name is required",
+    }).optional(),
+    role: z.nativeEnum(USER_ROLE).default(USER_ROLE.user).optional(),
+    email: z
+      .string({
+        required_error: "Email is required",
+      })
+      .email("Invalid email address").optional(),
+    password: z.string({
+      required_error: "Password is required",
+    }).optional(),
+    address: z.string({
+      required_error: "Address is required",
+    }).optional(),
+    phone: z.string({
+      required_error: "Phone number is required",
+    }).optional(),
+  }),
+});
 export const UserValidations = {
   createUser,
+  UpdateUser
 };
