@@ -12,7 +12,7 @@ export const initiatePayment = async (paymentData: any) => {
       signature_key: process.env.SIGNATURE_KEY,
       tran_id: paymentData.transactionId,
       //   success_url: `http://localhost:5000/api/payment/confirmation?transactionId=${paymentData.transactionId}`,
-        success_url: `https://car-washing-system-blush.vercel.app/api/payment/confirmation`,
+        success_url: `https://car-washing-system-backend.vercel.app/api/payment/confirmation`,
       fail_url: `https://car-washing-booking.web.app/`,
       cancel_url: "https://car-washing-booking.web.app/",
       amount: paymentData.totalPrice,
