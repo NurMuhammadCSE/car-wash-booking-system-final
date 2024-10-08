@@ -5,6 +5,7 @@ import sendResponse from "../../../utils/sendResponse";
 
 const createSlot = catchAsync(async (req, res) => {
   const result = await SlotServices.createSlot(req.body);
+  console.log(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -53,7 +54,6 @@ const updateSlotStatus = catchAsync(async (req, res) => {
     data: result,
   });
 });
-
 
 export const SlotController = {
   createSlot,

@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/availability", SlotController.getAllSlots);
 router.get("/availability/:slotId", SlotController.getSingleSlot);
+
 router.patch(
   "/:slotId",
   auth(USER_ROLE.admin),
