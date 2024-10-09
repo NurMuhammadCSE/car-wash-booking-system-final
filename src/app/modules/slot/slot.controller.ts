@@ -5,7 +5,7 @@ import sendResponse from "../../../utils/sendResponse";
 
 const createSlot = catchAsync(async (req, res) => {
   const result = await SlotServices.createSlot(req.body);
-  console.log(req.body);
+  // console.log(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

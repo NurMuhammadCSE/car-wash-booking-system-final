@@ -30,7 +30,8 @@ const createSlot = async (payload: TSlot) => {
     const totalDuration = endTotalMinutes - startTotalMinutes;
 
     // Calculate the number of slots
-    const numberOfSlots = totalDuration / serviceDuration;
+    // const numberOfSlots = totalDuration / serviceDuration;
+    const numberOfSlots = Math.floor(totalDuration / serviceDuration);
 
     const slots = [];
     let currentStartTime = startTotalMinutes;
